@@ -11,11 +11,12 @@ public class CustomHandleErrorAttribute : HandleErrorAttribute
     {
         _logger = LogManager.GetCurrentClassLogger();
     }
-    
+
     public override void OnException(ExceptionContext filterContext)
     {
         var ex = filterContext.Exception;
-        _logger.Error(ex, $"{filterContext.RouteData.Values["controller"]}.{filterContext.RouteData.Values["action"]}: {ex.Message}");
+        _logger.Error(ex,
+            $"{filterContext.RouteData.Values["controller"]}.{filterContext.RouteData.Values["action"]}: {ex.Message}");
         filterContext.ExceptionHandled = true;
         filterContext.Result = new ViewResult
         {

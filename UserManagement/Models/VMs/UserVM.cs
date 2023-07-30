@@ -7,36 +7,6 @@ namespace UserManagement.Models.VMs;
 
 public class UserVM
 {
-    [Display(Name = "S/N")]
-    public int Id { get; set; }
-
-    [Required]
-    [Display(Name = "NRIC")]
-    public string NRIC { get; set; }
-
-    [Required] 
-    [Display(Name = "Name")]
-    public string Name { get; set; }
-
-    [Required] public Gender Gender { get; set; }
-
-    [Required] 
-    [RegularExpression(@"([12]\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01]))", ErrorMessage = "Date is invalid. Date format: yyyy-mm-dd")]
-    [Display(Name = "Birthday (yyyy-mm-dd)")]
-    public string Birthday { get; set; }
-
-    public int Age => DateTime.Today.Year - Convert.ToDateTime(Birthday).Year;
-
-    [RegularExpression(@"([12]\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01]))", ErrorMessage = "Date is invalid. Date format: yyyy-mm-dd")]
-    [Display(Name = "Available Date (yyyy-mm-yy")]
-    public string AvailableDate { get; set; }
-
-    public List<SubjectVM> Subjects { get; set; }
-
-    public int NoOfSubjects => Subjects != null ? Subjects.Count : 0;
-
-    public string SubjectList => string.Join(",", Subjects.Select(s => s.Name));
-    
     public UserVM()
     {
     }
@@ -54,6 +24,33 @@ public class UserVM
             .Select(id => new SubjectVM { Id = Convert.ToInt32(id) })
             .ToList();
     }
+
+    [Display(Name = "S/N")] public int Id { get; set; }
+
+    [Required] [Display(Name = "NRIC")] public string NRIC { get; set; }
+
+    [Required] [Display(Name = "Name")] public string Name { get; set; }
+
+    [Required] public Gender Gender { get; set; }
+
+    [Required]
+    [RegularExpression(@"([12]\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01]))",
+        ErrorMessage = "Date is invalid. Date format: yyyy-mm-dd")]
+    [Display(Name = "Birthday (yyyy-mm-dd)")]
+    public string Birthday { get; set; }
+
+    public int Age => DateTime.Today.Year - Convert.ToDateTime(Birthday).Year;
+
+    [RegularExpression(@"([12]\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01]))",
+        ErrorMessage = "Date is invalid. Date format: yyyy-mm-dd")]
+    [Display(Name = "Available Date (yyyy-mm-yy")]
+    public string AvailableDate { get; set; }
+
+    public List<SubjectVM> Subjects { get; set; }
+
+    public int NoOfSubjects => Subjects != null ? Subjects.Count : 0;
+
+    public string SubjectList => string.Join(",", Subjects.Select(s => s.Name));
 
     public User ToUser()
     {

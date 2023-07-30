@@ -60,7 +60,7 @@
         <div class="form-group">
             @Html.LabelFor(model => model.Subjects, new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @for (int i = 0; i < Model.Subjects.Count(); i++)
+                @for (var i = 0; i < Model.Subjects.Count(); i++)
                 {
                     <div class="col-md-12">
                         @Html.HiddenFor(model => Model.Subjects[i].Id)

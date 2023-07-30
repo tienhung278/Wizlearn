@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-
 namespace UserManagement.Models;
 
 public class Subject : ModelBase

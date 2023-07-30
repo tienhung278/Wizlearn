@@ -11,9 +11,9 @@ namespace UserManagement.Services;
 
 public class UserService : IUserService
 {
+    private readonly ISubjectRepository _subjectRepository;
     private readonly IUnitOfWork _unitOfWork;
     private readonly IUserRepository _userRepository;
-    private readonly ISubjectRepository _subjectRepository;
 
     public UserService(IRepositoryManager repositoryManager)
     {
@@ -26,8 +26,9 @@ public class UserService : IUserService
     {
         IEnumerable<UserVM> userVMs = null;
         IEnumerable<User> users = null;
-        
-        if (filterUserVm == null || (string.IsNullOrEmpty(filterUserVm.NRIC) && string.IsNullOrEmpty(filterUserVm.Name)))
+
+        if (filterUserVm == null ||
+            (string.IsNullOrEmpty(filterUserVm.NRIC) && string.IsNullOrEmpty(filterUserVm.Name)))
         {
             users = await _userRepository.GetAllAsync();
             userVMs = users.Select(u => new UserVM(u));
@@ -35,13 +36,11 @@ public class UserService : IUserService
         else
         {
             if (!string.IsNullOrEmpty(filterUserVm.NRIC) && !string.IsNullOrEmpty(filterUserVm.Name))
-            {
-                users = await _userRepository.GetAsync(u => u.NRIC.Contains(filterUserVm.NRIC) && u.Name.Contains(filterUserVm.Name));
-            }
+                users = await _userRepository.GetAsync(u =>
+                    u.NRIC.Contains(filterUserVm.NRIC) && u.Name.Contains(filterUserVm.Name));
             else
-            {
-                users = await _userRepository.GetAsync(u => u.NRIC.Contains(filterUserVm.NRIC) || u.Name.Contains(filterUserVm.Name));
-            }
+                users = await _userRepository.GetAsync(u =>
+                    u.NRIC.Contains(filterUserVm.NRIC) || u.Name.Contains(filterUserVm.Name));
             userVMs = users.Select(u => new UserVM(u));
         }
 

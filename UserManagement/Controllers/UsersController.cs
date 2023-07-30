@@ -11,14 +11,14 @@ namespace UserManagement.Controllers;
 
 public class UsersController : Controller
 {
+    private readonly Logger _logger;
     private readonly ISubjectService _subjectService;
     private readonly IUserService _userService;
-    private readonly Logger _logger;
 
     public UsersController()
     {
         _logger = LogManager.GetCurrentClassLogger();
-        
+
         var serviceManager = new ServiceManager();
         _userService = serviceManager.UserService;
         _subjectService = serviceManager.SubjectService;
@@ -29,17 +29,17 @@ public class UsersController : Controller
     {
         var filterUserVm = new FilterUserVM();
         filterUserVm.Users = await _userService.GetUsersAsync(null);
-        
+
         return View(filterUserVm);
     }
-    
+
     // POST: Users/Index
     [HttpPost]
     [ValidateAntiForgeryToken]
     public async Task<ActionResult> Index(FilterUserVM filterUserVm)
     {
         filterUserVm.Users = await _userService.GetUsersAsync(filterUserVm);
-        
+
         return View(filterUserVm);
     }
 
@@ -54,20 +54,16 @@ public class UsersController : Controller
             _logger.Info($"{id} was not found");
             return HttpNotFound();
         }
-        
+
         var subjectVms = await _subjectService.GetSubjectsAsync();
         foreach (var subjectSelectedVm in userVm.Subjects)
-        {
-            foreach (var subjectVm in subjectVms)
+        foreach (var subjectVm in subjectVms)
+            if (subjectSelectedVm.Id == subjectVm.Id)
             {
-                if (subjectSelectedVm.Id == subjectVm.Id)
-                {
-                    subjectSelectedVm.Name = subjectVm.Name;
-                    break;
-                }
+                subjectSelectedVm.Name = subjectVm.Name;
+                break;
             }
-        }
-        
+
         return View(userVm);
     }
 
@@ -113,19 +109,15 @@ public class UsersController : Controller
         }
 
         var subjectSelectedIds = userVm.Subjects?.Select(s => s.Id);
-        
+
         var subjectVMs = (await _subjectService.GetSubjectsAsync()).ToList();
         foreach (var subjectVm in subjectVMs)
-        {
-            foreach (var subjectSelectedId in subjectSelectedIds)
+        foreach (var subjectSelectedId in subjectSelectedIds)
+            if (subjectVm.Id == subjectSelectedId)
             {
-                if (subjectVm.Id == subjectSelectedId)
-                {
-                    subjectVm.IsChecked = true;
-                    break;
-                }
+                subjectVm.IsChecked = true;
+                break;
             }
-        }
 
         userVm.Subjects = subjectVMs.ToList();
 
@@ -163,16 +155,12 @@ public class UsersController : Controller
 
         var subjectVms = await _subjectService.GetSubjectsAsync();
         foreach (var subjectSelectedVm in userVm.Subjects)
-        {
-            foreach (var subjectVm in subjectVms)
+        foreach (var subjectVm in subjectVms)
+            if (subjectSelectedVm.Id == subjectVm.Id)
             {
-                if (subjectSelectedVm.Id == subjectVm.Id)
-                {
-                    subjectSelectedVm.Name = subjectVm.Name;
-                    break;
-                }
+                subjectSelectedVm.Name = subjectVm.Name;
+                break;
             }
-        }
 
         return View(userVm);
     }
@@ -183,7 +171,7 @@ public class UsersController : Controller
     [ValidateAntiForgeryToken]
     public async Task<ActionResult> DeleteConfirmed(int id)
     {
-        _logger.Info($"User deleted a user");
+        _logger.Info("User deleted a user");
         await _userService.DeleteUserAsync(id);
 
         return RedirectToAction("Index");

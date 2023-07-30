@@ -1,5 +1,3 @@
-using System;
-
 namespace UserManagement.Models;
 
 public abstract class ModelBase
