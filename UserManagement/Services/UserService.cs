@@ -44,7 +44,6 @@ public class UserService : IUserService
             userVMs = users.Select(u => new UserVM(u));
         }
 
-        throw new NullReferenceException("test");
         return userVMs;
     }
 
