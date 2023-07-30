@@ -1,0 +1,10 @@
+﻿@model UserManagement.Models.VMs.FilterUserVM
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Users</h2>
+
+@Html.Partial("_SearchUsers", Model)
+@Html.Partial("_Users", Model.Users)
